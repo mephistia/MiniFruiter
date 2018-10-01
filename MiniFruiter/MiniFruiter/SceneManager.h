@@ -20,6 +20,7 @@ public:
 
 	void drawSprites(b2World &World, sf::RenderWindow &window);
 
+
 private:
 	sf::Texture GroundTexture;
 	sf::Texture BoxTexture;

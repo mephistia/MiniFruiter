@@ -14,11 +14,9 @@ SceneManager::~SceneManager()
 
 void SceneManager::inicializar()
 {
-	if (GroundTexture.loadFromFile("C:/Users/PC Gamer/Documents/GitHub/MiniFruiter/MiniFruiter/MiniFruiter/Assets/ground.png")) {
-		printf("Inicializou chao/n");
-	}
-	
-	BoxTexture.loadFromFile("C:/Users/PC Gamer/Documents/GitHub/MiniFruiter/MiniFruiter/MiniFruiter/Assets/box.png");
+	GroundTexture.loadFromFile("assets/ground.png");
+
+	BoxTexture.loadFromFile("assets/box.png");
 
 	
 }
