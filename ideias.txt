@@ -1,0 +1,16 @@
+Criar Edges para os lados e em cima (deixar um embaixo para ser game over/reset)
+
+Colocar o círculo como "não-físico" até que a tecla espaço seja apertada (se não tiver sido solto, solta)
+
+Mexer a localização do círculo com A e D
+
+Criar uma caixa para a plataforma. Mexer ela com A e D só depois de o círculo ter sido solto (release)
+
+Fazer uma leitura de arquivo simples (apenas um quadrado)
+
+Adicionar as frutas a partir da leitura de arquivo (objeto "sem física")
+
+Adicionar colisão com as frutas e fazer elas sumirem e adicionar pontos
+
+
+
