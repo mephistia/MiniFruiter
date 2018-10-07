@@ -1,11 +1,11 @@
 #pragma once
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
-#include <string.h>
+#include <string>
 
-const float SCALE = 30;
+const float SCALE = 40;
 
-enum bodyDataType { MONSTRO, PALTAFORMA, PAREDE_H, PAREDE_V, ITEM, CAIXA };
+enum bodyDataType { MONSTRO, PLATAFORMA, PAREDE_H, PAREDE_V, ITEM, CAIXA };
 
 
 
@@ -19,9 +19,8 @@ public:
 
 	void inicializar(); // Carregar Assets
 
-	void criaChao(b2World& World, float X, float Y);
 	void criaParede(b2World &world, float X, float Y, float altura, float largura);
-	void criaCaixa(b2World& World, int X, int Y);
+	void criaPlataforma(b2World &world, float X, float Y, float altura, float largura);
 	void criaPlayer(b2World &world, float X, float Y);
 
 
@@ -32,7 +31,7 @@ public:
 	void setPos(b2Body *Body, float X, float Y, float angle);
 
 
-
+	bool isAnyKeyPressed();
 
 
 private:
@@ -41,13 +40,12 @@ private:
 	sf::Texture PH;
 	sf::Texture BoxTexture;
 	sf::Texture PlayerTexture;
+	sf::Texture PlatformTexture;
 
 	struct BodyData {
 		int ID;
-		bool fisico;
 	};
 
-	bool release;
 
 };
 

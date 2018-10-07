@@ -14,14 +14,7 @@ SceneManager::~SceneManager()
 
 void SceneManager::inicializar()
 {
-	if (!GroundTexture.loadFromFile("assets/ground.png")) 
-		exit(1);
 	
-
-	if (!BoxTexture.loadFromFile("assets/box.png")) // Textura da caixa normal
-		exit(1);
-	
-
 	if (!PlayerTexture.loadFromFile("assets/circle.png")) // Textura do jogador (mini-fruiter)
 		exit(1);
 
@@ -31,38 +24,11 @@ void SceneManager::inicializar()
 	if (!PV.loadFromFile("assets/edgev.png")) // Parede vertical
 		exit(1);
 
-	release = false;
-	
+	if (!PlatformTexture.loadFromFile("assets/platform.png")) // Parede vertical
+		exit(1);
 }
 
 
-// Chão estático
-void SceneManager::criaChao(b2World & World, float X, float Y)
-{
-
-	// Criar corpo físico
-	b2BodyDef BodyDef;
-	BodyDef.position = b2Vec2(X / SCALE, Y / SCALE);
-	BodyDef.type = b2_staticBody;
-	b2Body* Body = World.CreateBody(&BodyDef);
-
-
-	// Definir a forma
-	b2PolygonShape Shape;
-	Shape.SetAsBox((800 / 2) / SCALE, (16 / 2) / SCALE); // Caixa de 800px de largura por 16px de altura
-
-
-	// Definir a fixture
-	b2FixtureDef FixtureDef;
-	FixtureDef.density = 0;  
-	FixtureDef.shape = &Shape;
-	Body->CreateFixture(&FixtureDef); 
-
-	BodyData *data = new BodyData;
-	data->ID = PAREDE_H;
-	data->fisico = false;
-	Body->SetUserData(data);
-}
 
 // Paredes da janela
 void SceneManager::criaParede(b2World & world, float X, float Y, float altura, float largura)
@@ -92,41 +58,38 @@ void SceneManager::criaParede(b2World & world, float X, float Y, float altura, f
 	else
 		data->ID = PAREDE_V;
 
-	data->fisico = false;
 
 	Body->SetUserData(data);
 }
 
-
-
-// Caixa dinâmica
-void SceneManager::criaCaixa(b2World & World, int X, int Y)
+void SceneManager::criaPlataforma(b2World & world, float X, float Y, float altura, float largura)
 {
-
 	// Criar corpo físico
 	b2BodyDef BodyDef;
 	BodyDef.position = b2Vec2(X / SCALE, Y / SCALE);
-	BodyDef.type = b2_dynamicBody;
-	b2Body* Body = World.CreateBody(&BodyDef);
+	BodyDef.type = b2_kinematicBody;
+	b2Body* Body = world.CreateBody(&BodyDef);
 
-	// Criar a forma
+
+	// Definir a forma
 	b2PolygonShape Shape;
-	Shape.SetAsBox((32 / 2) / SCALE, (32 / 2) / SCALE);
+	Shape.SetAsBox((largura / 2) / SCALE, (altura / 2) / SCALE);
 
-	// Criar a fixture
-	b2FixtureDef FixtureDef;
-	FixtureDef.density = 1.f;
-	FixtureDef.friction = 0.7f;
-	FixtureDef.shape = &Shape;
-	Body->CreateFixture(&FixtureDef);
+	// Fixture
+	b2FixtureDef fix;
+	fix.shape = &Shape;
+	fix.density = 10;
+	fix.friction = 0.5;
+	fix.restitution = 0.8;
 
 	BodyData *data = new BodyData;
-	data->ID = CAIXA;
-	data->fisico = true;
+	data->ID = PLATAFORMA;
 
 	Body->SetUserData(data);
-}
 
+	Body->SetGravityScale(0);
+
+}
 
 // Círculo
 void SceneManager::criaPlayer(b2World & world, float X, float Y)
@@ -146,12 +109,11 @@ void SceneManager::criaPlayer(b2World & world, float X, float Y)
 	fix.shape = &forma;
 	fix.density = 10;
 	fix.friction = 0.5;
-	fix.restitution = 0.99;
+	fix.restitution = 0.8;
 
 	Body->CreateFixture(&fix);
 	BodyData *data = new BodyData;
 	data->ID = MONSTRO;
-	data->fisico = false; ; // Iniciar com false
 
 	Body->SetUserData(data);
 
@@ -160,7 +122,6 @@ void SceneManager::criaPlayer(b2World & world, float X, float Y)
 	
 
 }
-
 
 void SceneManager::drawSprites(b2World & World, sf::RenderWindow &window)
 {
@@ -211,6 +172,15 @@ void SceneManager::drawSprites(b2World & World, sf::RenderWindow &window)
 			MonsterSprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
 			window.draw(MonsterSprite);
 		}
+
+		else if (bd->ID == PLATAFORMA) {
+			sf::Sprite PlataformaSprite;
+			PlataformaSprite.setTexture(PlatformTexture);
+			PlataformaSprite.setOrigin(48, 16);
+			PlataformaSprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
+			PlataformaSprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
+			window.draw(PlataformaSprite);
+		}
 	}
 }
 
@@ -233,5 +203,15 @@ void SceneManager::setPos(b2Body * Body, float X, float Y, float angle)
 {
 	b2Vec2 *vector = new b2Vec2(X, Y);
 	Body->SetTransform(*vector, angle);
+}
+
+bool SceneManager::isAnyKeyPressed()
+{
+	for (int k = -1; k < sf::Keyboard::KeyCount; ++k)
+	{
+		if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(k)))
+			return true;
+	}
+	return false;
 }
 
