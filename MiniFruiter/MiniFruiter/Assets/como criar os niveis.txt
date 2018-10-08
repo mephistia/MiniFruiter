@@ -1,0 +1,29 @@
+1 numero da fase
+
+2 caixas/quadrados
+2 retangulos moveis
+3 circulos
+8 triangulos
+2 retangulos com joint
+1 pendulo
+2 instancias de portal
+
+
+no desenho de sprite só precisa da posição central.
+Criação de corpo físico já divide o pixel pela escala
+
+
+fazer um nivel por arquivo
+
+for (int i = 0; i<qtdQuadrados;i++)
+
+se n tiver nada, não entra no for!
+
+o triangulo é sempre vertices fixos. preciso registrar apenas posições x e y, altura e largura quando for retangulo e rotação. usar SetTransform se precisar rotacionar.
+
+não é possível criar lista nem array de b2body porque ele não possui construtor (apenas inicialização)
+
+
+
+fazer um arquivo para cada leitura. fazer um arquivo de caminhos de leitura para colocar um nível em cada string.
+

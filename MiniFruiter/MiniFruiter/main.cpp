@@ -10,13 +10,13 @@ int main()
 
 
 	// Criar mundo físico
-	b2Vec2 Gravity(0, 9.8);
+	b2Vec2 Gravity(0, 1);
 	
 	b2World *World = new b2World(Gravity);
 
 	// delta time
 	double t = 0.0;
-	double dt = 1.0 / 60.0;
+	double dt = 1.0 / 600.0;
 
 	int32 vIt = 8;
 	int32 pIt = 3;
@@ -42,11 +42,18 @@ int main()
 	// Criar personagem bolinha
 	Manager.criaPlayer(*World, 400, 5);
 
+	// Criar os objetos da fase 0
+	Manager.lerCaminhos("assets/caminhos.txt");
+	Manager.lerLevel(Manager.getLevelPath(0), *World);
+
 
 	while (window.isOpen()) // Game Loop
 	{
 
-		
+		// fechar janela com esc
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			window.close();
+		}
 
 		// movimentar corpo do jogador se nao estiver ativo
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
@@ -56,7 +63,7 @@ int main()
 
 			// se não tiver largado o monstro
 			if (temp->GetGravityScale() == 0)
-				temp->SetLinearVelocity(b2Vec2(-1, 0));
+				temp->SetLinearVelocity(b2Vec2(-0.5, 0));
 
 			else {
 				temp = Manager.getBody(PLATAFORMA, *World);
@@ -76,7 +83,7 @@ int main()
 		{
 			temp = Manager.getBody(MONSTRO,* World);
 			if (temp->GetGravityScale() == 0)
-				temp->SetLinearVelocity(b2Vec2(1, 0));
+				temp->SetLinearVelocity(b2Vec2(0.5, 0));
 
 			else {
 				temp = Manager.getBody(PLATAFORMA, *World);
@@ -97,10 +104,10 @@ int main()
 		}
 
 		if (!Manager.isAnyKeyPressed()) {
-			temp = Manager.getBody(MONSTRO, *World);
+			/*temp = Manager.getBody(MONSTRO, *World);
 
 			if (temp->GetGravityScale() == 0)
-				temp->SetLinearVelocity(b2Vec2(0, 0));
+				temp->SetLinearVelocity(b2Vec2(0, 0));*/
 
 			temp = Manager.getBody(PLATAFORMA, *World);
 			temp->SetLinearVelocity(b2Vec2(0, 0));
@@ -119,7 +126,10 @@ int main()
 
 		t += dt;
 
-		std::cout << t << std::endl;
+		/// Úteis para mostrar no console
+		//std::cout << t << std::endl; //TEMPO
+		//sf::Vector2i positionmouse = sf::Mouse::getPosition(window); //PEGA POS DO MOUSE
+		//std::cout << "Mouse X: " << positionmouse.x << ", Mouse Y: " << positionmouse.y << "." << std::endl; // IMPRIME POS DO MOUSE
 
 
 		// Fim do Loop
