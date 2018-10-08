@@ -1,3 +1,0 @@
-﻿  main.cpp
-d:\projetos jogos\minifruiter\minifruiter\minifruiter\main.cpp(118): warning C4244: 'argumento': conversão de 'double' para 'float32', possível perda de dados
-  MiniFruiter.vcxproj -> D:\Projetos Jogos\MiniFruiter\MiniFruiter\Debug\MiniFruiter.exe
